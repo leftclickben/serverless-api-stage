@@ -1,0 +1,30 @@
+{
+    // settings
+    "maxdepth": 5,
+    "quotmark": true,
+    "strict": true,
+
+    // restrictions
+    "bitwise": true,
+    "camelcase": true,
+    "curly": true,
+    "eqeqeq": true,
+    "forin": true,
+    "immed": true,
+    "latedef": "nofunc",
+    "newcap": true,
+    "nonbsp": true,
+    "nonew": true,
+    "notypeof": true,
+    "singleGroups": false,
+    "undef": true,
+
+    // environment
+    "debug": true,
+    "devel": true,
+    "esversion": 6,
+
+    // globals
+    "node": true,
+    "mocha": true
+}
