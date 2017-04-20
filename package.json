@@ -1,0 +1,39 @@
+{
+  "name": "serverless-api-stage",
+  "version": "1.0.0",
+  "description": "Serverless API Stage plugin, enables stage variables and logging for AWS API Gateway.",
+  "main": "src/index.js",
+  "scripts": {
+    "lint": "jshint src/*.js test/**/*.js",
+    "test": "npm run lint && mocha test/spec/**.spec.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/leftclickben/serverless-api-stage.git"
+  },
+  "keywords": [
+    "serverless",
+    "api",
+    "stage",
+    "stage",
+    "variable",
+    "logging",
+    "api",
+    "gateway",
+    "aws"
+  ],
+  "author": "Ben New <ben@leftclick.com.au>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/leftclickben/serverless-api-stage/issues"
+  },
+  "homepage": "https://github.com/leftclickben/serverless-api-stage#readme",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.2.0",
+    "sinon": "^2.1.0"
+  },
+  "dependencies": {
+    "lodash": "^4.17.4"
+  }
+}
