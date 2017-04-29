@@ -18,6 +18,8 @@ Namely:
 * The stage may have stage variables defined by `custom.stageSettings.Variables` in your `serverless.yml`.
 * The stage may have logging and other method properties defined by `custom.stageSettings.MethodSettings` in your 
   `serverless.yml`.
+* An `AWS::IAM::Role` resource is created with the correct permissions to write Cloudwatch logs.
+* This IAM Role for logs is set in the `AWS::ApiGateway::Account` settings resource.
 
 ## Installation
 
