@@ -6,6 +6,8 @@ module.exports = (service, stageName, deploymentKey, stageSettings) => ({
     service: {
         service: service,
         provider: {
+            stage: stageName,
+            region: 'test-region',
             compiledCloudFormationTemplate: {
                 Resources: {
                     [deploymentKey]: {
