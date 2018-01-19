@@ -34,17 +34,21 @@ plugins:
 #...
 custom:
   stageSettings:
+    CacheClusterEnabled: true
+    CacheClusterSize: '0.5'
     Variables:
       foo: bar
       baz: xyzzy
     MethodSettings:
       LoggingLevel: INFO
+      CachingEnabled: true
+      CacheTtlInSeconds: 3600
       # see below...
 #...
 ```
 
 The full list of `MethodSettings` available are defined in the 
-[AWS CloudFormation documentation](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apitgateway-stage-methodsetting.html).
+[AWS CloudFormation documentation](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigateway-stage-methodsetting.html).
 
 ## Contributors
 
