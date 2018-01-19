@@ -39,6 +39,8 @@ describe('The `serverless-api-stage` plugin', function () {
                         RestApiId: {
                             Ref: 'ApiGatewayRestApi'
                         },
+                        CacheClusterEnabled: false,
+                        CacheClusterSize: '0.5',
                         DeploymentId: {
                             Ref: 'Deployment'
                         },
@@ -66,6 +68,8 @@ describe('The `serverless-api-stage` plugin', function () {
         let serverless, pluginInstance;
         beforeEach(function () {
             serverless = mockServerless('service', 'testing', 'Deployment', {
+                CacheClusterEnabled: true,
+                CacheClusterSize: '1.0',
                 Variables: {
                     foo: 'bar'
                 },
@@ -172,6 +176,8 @@ describe('The `serverless-api-stage` plugin', function () {
                         RestApiId: {
                             Ref: 'ApiGatewayRestApi'
                         },
+                        CacheClusterEnabled: true,
+                        CacheClusterSize: '1.0',
                         DeploymentId: {
                             Ref: 'Deployment'
                         },
