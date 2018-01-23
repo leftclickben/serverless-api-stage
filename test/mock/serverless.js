@@ -6,8 +6,6 @@ module.exports = (service, stageName, deploymentKey, stageSettings) => ({
     service: {
         service: service,
         provider: {
-            stage: stageName,
-            region: 'test-region',
             compiledCloudFormationTemplate: {
                 Resources: {
                     [deploymentKey]: {
@@ -24,6 +22,10 @@ module.exports = (service, stageName, deploymentKey, stageSettings) => ({
             stageSettings: stageSettings
         }
     },
+    getProvider: () => ({
+      getStage: () => stageName,
+      getRegion: () => 'test-region',
+    }),
     cli: {
         log: sinon.spy()
     }
