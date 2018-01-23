@@ -75,7 +75,10 @@ describe('The `serverless-api-stage` plugin', function () {
                 },
                 MethodSettings: {
                     LoggingLevel: 'INFO',
-                    MetricsEnabled: true
+                    MetricsEnabled: true,
+                    HttpMethod: 'GET',
+                    CacheTtlInSeconds: 3600,
+                    CachingEnabled: true
                 }
             });
             pluginInstance = new ApiStagePlugin(serverless);
@@ -187,8 +190,10 @@ describe('The `serverless-api-stage` plugin', function () {
                         MethodSettings: [
                             {
                                 LoggingLevel: 'INFO',
+                                CacheTtlInSeconds: 3600,
+                                CachingEnabled: true,
                                 DataTraceEnabled: true,
-                                HttpMethod: '*',
+                                HttpMethod: 'GET',
                                 ResourcePath: '/*',
                                 MetricsEnabled: true
                             }
