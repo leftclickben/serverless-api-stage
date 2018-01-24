@@ -42,7 +42,7 @@ module.exports = function (serverless) {
                                         'Fn::Join': [
                                             '-',
                                             [
-                                                serverless.service.provider.stage,
+                                                serverless.getProvider('aws').getStage(),
                                                 serverless.service.service,
                                                 'apiGatewayLogs'
                                             ]
@@ -74,8 +74,8 @@ module.exports = function (serverless) {
                                     '-',
                                     [
                                         serverless.service.service,
-                                        serverless.service.provider.stage,
-                                        serverless.service.provider.region,
+                                        serverless.getProvider('aws').getStage(),
+                                        serverless.getProvider('aws').getRegion(),
                                         'apiGatewayLogRole'
                                     ]
                                 ]
@@ -112,6 +112,8 @@ module.exports = function (serverless) {
                                 Ref: deploymentKey
                             },
                             Variables: stageSettings.Variables || {},
+                            CacheClusterEnabled: stageSettings.CacheClusterEnabled || false,
+                            CacheClusterSize: stageSettings.CacheClusterSize || '0.5',
                             MethodSettings: [
                                 _.defaults(
                                     stageSettings.MethodSettings || {},
