@@ -41,6 +41,8 @@ describe('The `serverless-api-stage` plugin', function () {
                         },
                         CacheClusterEnabled: false,
                         CacheClusterSize: '0.5',
+                        ClientCertificateId: undefined,
+                        DocumentationVersion: undefined,
                         DeploymentId: {
                             Ref: 'Deployment'
                         },
@@ -70,6 +72,8 @@ describe('The `serverless-api-stage` plugin', function () {
             serverless = mockServerless('service', 'testing', 'Deployment', {
                 CacheClusterEnabled: true,
                 CacheClusterSize: '1.0',
+                ClientCertificateId: undefined,
+                DocumentationVersion: undefined,
                 Variables: {
                     foo: 'bar'
                 },
@@ -181,6 +185,8 @@ describe('The `serverless-api-stage` plugin', function () {
                         },
                         CacheClusterEnabled: true,
                         CacheClusterSize: '1.0',
+                        ClientCertificateId: undefined,
+                        DocumentationVersion: undefined,
                         DeploymentId: {
                             Ref: 'Deployment'
                         },
@@ -196,6 +202,268 @@ describe('The `serverless-api-stage` plugin', function () {
                                 HttpMethod: 'GET',
                                 ResourcePath: '/*',
                                 MetricsEnabled: true
+                            }
+                        ]
+                    }
+                });
+            });
+            it('Removes the `StageName` property of the API Gateway Deployment resource', function () {
+                expect(serverless.service.provider.compiledCloudFormationTemplate.Resources.Deployment.Properties.StageName).to.equal(undefined);
+            });
+            it('Logs messages', function () {
+                expect(serverless.cli.log.calledTwice).to.equal(true);
+            });
+        });
+    });
+    describe('With a `stageSettings` custom property that specifies `ClientCertificateId`', function () {
+        let serverless, pluginInstance;
+        beforeEach(function () {
+            serverless = mockServerless('service', 'testing', 'Deployment', {
+                ClientCertificateId: 'id-of-certificate'
+            });
+            pluginInstance = new ApiStagePlugin(serverless);
+        });
+        describe('When the `before:deploy:deploy` hook is executed', function () {
+            beforeEach(function () {
+                pluginInstance.hooks['before:deploy:deploy']();
+            });
+            it('Adds an IAM Role resource to the CloudFormation template', function () {
+                expect(serverless.service.provider.compiledCloudFormationTemplate.Resources.IamRoleApiGatewayCloudwatchLogRole).to.deep.equal({
+                    Type: 'AWS::IAM::Role',
+                    Properties: {
+                        AssumeRolePolicyDocument: {
+                            Version: '2012-10-17',
+                            Statement: [
+                                {
+                                    Effect: 'Allow',
+                                    Principal: {
+                                        Service: [
+                                            'apigateway.amazonaws.com'
+                                        ]
+                                    },
+                                    Action: [
+                                        'sts:AssumeRole'
+                                    ]
+                                }
+                            ]
+                        },
+                        Policies: [
+                            {
+                                PolicyName: {
+                                    'Fn::Join': [
+                                        '-',
+                                        [
+                                            'testing',
+                                            'service',
+                                            'apiGatewayLogs'
+                                        ]
+                                    ]
+                                },
+                                PolicyDocument: {
+                                    Version: '2012-10-17',
+                                    Statement: [
+                                        {
+                                            Effect: 'Allow',
+                                            Action: [
+                                                'logs:CreateLogGroup',
+                                                'logs:CreateLogStream',
+                                                'logs:DescribeLogGroups',
+                                                'logs:DescribeLogStreams',
+                                                'logs:PutLogEvents',
+                                                'logs:GetLogEvents',
+                                                'logs:FilterLogEvents'
+                                            ],
+                                            Resource: '*'
+                                        }
+                                    ]
+                                }
+                            }
+                        ],
+                        Path: '/',
+                        RoleName: {
+                            'Fn::Join': [
+                                '-',
+                                [
+                                    'service',
+                                    'testing',
+                                    'test-region',
+                                    'apiGatewayLogRole'
+                                ]
+                            ]
+                        }
+                    }
+                });
+            });
+            it('Adds an API Gateway Account resource to the CloudFormation template', function () {
+                expect(serverless.service.provider.compiledCloudFormationTemplate.Resources.ApiGatewayAccount).to.deep.equal({
+                    Type: 'AWS::ApiGateway::Account',
+                    Properties: {
+                        CloudWatchRoleArn: {
+                            'Fn::GetAtt': [
+                                'IamRoleApiGatewayCloudwatchLogRole',
+                                'Arn'
+                            ]
+                        }
+                    },
+                    DependsOn: [
+                        'IamRoleApiGatewayCloudwatchLogRole'
+                    ]
+                });
+            });
+            it('Adds an API Gateway Stage resource to the CloudFormation template with specified variables and settings', function () {
+                expect(serverless.service.provider.compiledCloudFormationTemplate.Resources.ApiGatewayStageTesting).to.deep.equal({
+                    Type: 'AWS::ApiGateway::Stage',
+                    Properties: {
+                        StageName: 'testing',
+                        Description: 'testing stage of service',
+                        RestApiId: {
+                            Ref: 'ApiGatewayRestApi'
+                        },
+                        CacheClusterEnabled: false,
+                        CacheClusterSize: '0.5',
+                        DeploymentId: {
+                            Ref: 'Deployment'
+                        },
+                        ClientCertificateId: 'id-of-certificate',
+                        DocumentationVersion: undefined,
+                        Variables: {},
+                        MethodSettings: [
+                            {
+                                DataTraceEnabled: true,
+                                HttpMethod: '*',
+                                ResourcePath: '/*',
+                                MetricsEnabled: false
+                            }
+                        ]
+                    }
+                });
+            });
+            it('Removes the `StageName` property of the API Gateway Deployment resource', function () {
+                expect(serverless.service.provider.compiledCloudFormationTemplate.Resources.Deployment.Properties.StageName).to.equal(undefined);
+            });
+            it('Logs messages', function () {
+                expect(serverless.cli.log.calledTwice).to.equal(true);
+            });
+        });
+    });
+    describe('With a `stageSettings` custom property that specifies `DocumentationVersion`', function () {
+        let serverless, pluginInstance;
+        beforeEach(function () {
+            serverless = mockServerless('service', 'testing', 'Deployment', {
+                DocumentationVersion: 'v1.0.0'
+            });
+            pluginInstance = new ApiStagePlugin(serverless);
+        });
+        describe('When the `before:deploy:deploy` hook is executed', function () {
+            beforeEach(function () {
+                pluginInstance.hooks['before:deploy:deploy']();
+            });
+            it('Adds an IAM Role resource to the CloudFormation template', function () {
+                expect(serverless.service.provider.compiledCloudFormationTemplate.Resources.IamRoleApiGatewayCloudwatchLogRole).to.deep.equal({
+                    Type: 'AWS::IAM::Role',
+                    Properties: {
+                        AssumeRolePolicyDocument: {
+                            Version: '2012-10-17',
+                            Statement: [
+                                {
+                                    Effect: 'Allow',
+                                    Principal: {
+                                        Service: [
+                                            'apigateway.amazonaws.com'
+                                        ]
+                                    },
+                                    Action: [
+                                        'sts:AssumeRole'
+                                    ]
+                                }
+                            ]
+                        },
+                        Policies: [
+                            {
+                                PolicyName: {
+                                    'Fn::Join': [
+                                        '-',
+                                        [
+                                            'testing',
+                                            'service',
+                                            'apiGatewayLogs'
+                                        ]
+                                    ]
+                                },
+                                PolicyDocument: {
+                                    Version: '2012-10-17',
+                                    Statement: [
+                                        {
+                                            Effect: 'Allow',
+                                            Action: [
+                                                'logs:CreateLogGroup',
+                                                'logs:CreateLogStream',
+                                                'logs:DescribeLogGroups',
+                                                'logs:DescribeLogStreams',
+                                                'logs:PutLogEvents',
+                                                'logs:GetLogEvents',
+                                                'logs:FilterLogEvents'
+                                            ],
+                                            Resource: '*'
+                                        }
+                                    ]
+                                }
+                            }
+                        ],
+                        Path: '/',
+                        RoleName: {
+                            'Fn::Join': [
+                                '-',
+                                [
+                                    'service',
+                                    'testing',
+                                    'test-region',
+                                    'apiGatewayLogRole'
+                                ]
+                            ]
+                        }
+                    }
+                });
+            });
+            it('Adds an API Gateway Account resource to the CloudFormation template', function () {
+                expect(serverless.service.provider.compiledCloudFormationTemplate.Resources.ApiGatewayAccount).to.deep.equal({
+                    Type: 'AWS::ApiGateway::Account',
+                    Properties: {
+                        CloudWatchRoleArn: {
+                            'Fn::GetAtt': [
+                                'IamRoleApiGatewayCloudwatchLogRole',
+                                'Arn'
+                            ]
+                        }
+                    },
+                    DependsOn: [
+                        'IamRoleApiGatewayCloudwatchLogRole'
+                    ]
+                });
+            });
+            it('Adds an API Gateway Stage resource to the CloudFormation template with specified variables and settings', function () {
+                expect(serverless.service.provider.compiledCloudFormationTemplate.Resources.ApiGatewayStageTesting).to.deep.equal({
+                    Type: 'AWS::ApiGateway::Stage',
+                    Properties: {
+                        StageName: 'testing',
+                        Description: 'testing stage of service',
+                        RestApiId: {
+                            Ref: 'ApiGatewayRestApi'
+                        },
+                        CacheClusterEnabled: false,
+                        CacheClusterSize: '0.5',
+                        DeploymentId: {
+                            Ref: 'Deployment'
+                        },
+                        ClientCertificateId: undefined,
+                        DocumentationVersion: 'v1.0.0',
+                        Variables: {},
+                        MethodSettings: [
+                            {
+                                DataTraceEnabled: true,
+                                HttpMethod: '*',
+                                ResourcePath: '/*',
+                                MetricsEnabled: false
                             }
                         ]
                     }

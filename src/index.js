@@ -114,6 +114,8 @@ module.exports = function (serverless) {
                             Variables: stageSettings.Variables || {},
                             CacheClusterEnabled: stageSettings.CacheClusterEnabled || false,
                             CacheClusterSize: stageSettings.CacheClusterSize || '0.5',
+                            ClientCertificateId: stageSettings.ClientCertificateId || undefined,
+                            DocumentationVersion: stageSettings.DocumentationVersion || undefined,
                             MethodSettings: [
                                 _.defaults(
                                     stageSettings.MethodSettings || {},
@@ -127,7 +129,7 @@ module.exports = function (serverless) {
                             ]
                         }
                     }))
-                    .mapKeys((deployment, deploymentKey) => `ApiGatewayStage${_.upperFirst(deployment.Properties.StageName)}`)
+                    .mapKeys((deployment) => `ApiGatewayStage${_.upperFirst(deployment.Properties.StageName)}`)
                     .value(),
 
                 // Deployments, with the stage name removed (the Stage's DeploymentId property is used instead).
