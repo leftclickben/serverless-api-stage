@@ -14,6 +14,7 @@ module.exports = function (serverless) {
                 .pickBy((resource) => resource.Type === 'AWS::ApiGateway::Deployment');
 
             // TODO Handle other resources - ApiKey, BasePathMapping, UsagePlan, etc
+            const methodSettings = [].concat(stageSettings.MethodSettings);
             _.extend(template.Resources,
                 // Enable logging: IAM role for API Gateway, and API Gateway account settings
                 {
@@ -114,9 +115,9 @@ module.exports = function (serverless) {
                             Variables: stageSettings.Variables || {},
                             CacheClusterEnabled: stageSettings.CacheClusterEnabled || false,
                             CacheClusterSize: stageSettings.CacheClusterSize || '0.5',
-                            MethodSettings: [
+                            MethodSettings: methodSettings.map(item => (
                                 _.defaults(
-                                    stageSettings.MethodSettings || {},
+                                    item || {},
                                     {
                                         DataTraceEnabled: true,
                                         HttpMethod: '*',
@@ -124,7 +125,7 @@ module.exports = function (serverless) {
                                         MetricsEnabled: false
                                     }
                                 )
-                            ]
+                            ))
                         }
                     }))
                     .mapKeys((deployment, deploymentKey) => `ApiGatewayStage${_.upperFirst(deployment.Properties.StageName)}`)
