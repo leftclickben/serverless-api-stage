@@ -66,7 +66,7 @@ describe('The `serverless-api-stage` plugin', function () {
             });
         });
     });
-    describe('With a `stageSettings` custom property that specifies `Variables` and `StageSettings`', function () {
+    describe('With a `stageSettings` custom property that specifies `Variables` and `MethodSettings`', function () {
         let serverless, pluginInstance;
         beforeEach(function () {
             serverless = mockServerless('service', 'testing', 'Deployment', {
@@ -462,6 +462,75 @@ describe('The `serverless-api-stage` plugin', function () {
                             {
                                 DataTraceEnabled: true,
                                 HttpMethod: '*',
+                                ResourcePath: '/*',
+                                MetricsEnabled: false
+                            }
+                        ]
+                    }
+                });
+            });
+            it('Removes the `StageName` property of the API Gateway Deployment resource', function () {
+                expect(serverless.service.provider.compiledCloudFormationTemplate.Resources.Deployment.Properties.StageName).to.equal(undefined);
+            });
+            it('Logs messages', function () {
+                expect(serverless.cli.log.calledTwice).to.equal(true);
+            });
+        });
+    });
+    describe('With a `stageSettings` custom property that specifies `MethodSettings` without any CloudWatch-dependent values', function () {
+        let serverless, pluginInstance;
+        beforeEach(function () {
+            serverless = mockServerless('service', 'testing', 'Deployment', {
+                CacheClusterEnabled: true,
+                CacheClusterSize: '1.0',
+                ClientCertificateId: undefined,
+                DocumentationVersion: undefined,
+                Variables: {
+                    foo: 'bar'
+                },
+                MethodSettings: {
+                    HttpMethod: 'GET',
+                    CacheTtlInSeconds: 3600,
+                    CachingEnabled: true
+                }
+            });
+            pluginInstance = new ApiStagePlugin(serverless);
+        });
+        describe('When the `before:deploy:deploy` hook is executed', function () {
+            beforeEach(function () {
+                pluginInstance.hooks['before:deploy:deploy']();
+            });
+            it('Does not add an IAM Role resource to the CloudFormation template', function () {
+                expect(serverless.service.provider.compiledCloudFormationTemplate.Resources.IamRoleApiGatewayCloudwatchLogRole).to.equal(undefined);
+            });
+            it('Does not add an API Gateway Account resource to the CloudFormation template', function () {
+                expect(serverless.service.provider.compiledCloudFormationTemplate.Resources.ApiGatewayAccount).to.equal(undefined);
+            });
+            it('Adds an API Gateway Stage resource to the CloudFormation template with specified variables and settings', function () {
+                expect(serverless.service.provider.compiledCloudFormationTemplate.Resources.ApiGatewayStageTesting).to.deep.equal({
+                    Type: 'AWS::ApiGateway::Stage',
+                    Properties: {
+                        StageName: 'testing',
+                        Description: 'testing stage of service',
+                        RestApiId: {
+                            Ref: 'ApiGatewayRestApi'
+                        },
+                        CacheClusterEnabled: true,
+                        CacheClusterSize: '1.0',
+                        ClientCertificateId: undefined,
+                        DocumentationVersion: undefined,
+                        DeploymentId: {
+                            Ref: 'Deployment'
+                        },
+                        Variables: {
+                            foo: 'bar'
+                        },
+                        MethodSettings: [
+                            {
+                                CacheTtlInSeconds: 3600,
+                                CachingEnabled: true,
+                                DataTraceEnabled: true,
+                                HttpMethod: 'GET',
                                 ResourcePath: '/*',
                                 MetricsEnabled: false
                             }
