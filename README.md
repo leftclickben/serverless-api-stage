@@ -63,3 +63,15 @@ Code changes or additions should include corresponding unit test changes or addi
 Please don't update the `version` attribute in `package.json`, as multiple changes might be bundled into a single 
 release.  Version bumps will be done in separate pull requests at the time of creating the release and publishing
 to npm.
+
+## Plugin Roadmap
+
+Due to discussion with contributors, there are some breaking changes to be made to the plugin, namely:
+
++ Make the `Role` creation optional (and change the default behaviour)
++ Standardise the `LogicalId` of the `ApiGatewayStage` resource
++ Multiple stages
+
+A migration guide will be provided.
+
+See [v2](https://github.com/leftclickben/serverless-api-stage/milestone/1).
