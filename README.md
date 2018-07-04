@@ -1,7 +1,9 @@
 # Serverless API Stage plugin
 
-[![Build Status](https://travis-ci.org/leftclickben/serverless-api-stage.svg?branch=master)](https://travis-ci.org/leftclickben/serverless-api-stage)
+[![serverless](http://public.serverless.com/badges/v3.svg)](http://www.serverless.com)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![npm version](https://badge.fury.io/js/serverless-api-stage.svg)](https://badge.fury.io/js/serverless-api-stage)
+[![Build Status](https://travis-ci.org/leftclickben/serverless-api-stage.svg?branch=master)](https://travis-ci.org/leftclickben/serverless-api-stage)
 
 Plugin for the [serverless framework](https://github.com/serverless/serverless) that allows the use of stages with 
 defined stage variables and logging configuration, when using the AWS provider.
