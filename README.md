@@ -1,7 +1,9 @@
 # Serverless API Stage plugin
 
+[![serverless](http://public.serverless.com/badges/v3.svg)](http://www.serverless.com)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![npm version](https://badge.fury.io/js/serverless-api-stage.svg)](https://badge.fury.io/js/serverless-api-stage)
 [![Build Status](https://travis-ci.org/leftclickben/serverless-api-stage.svg?branch=master)](https://travis-ci.org/leftclickben/serverless-api-stage)
-[![License: MIT](https://camo.githubusercontent.com/d59450139b6d354f15a2252a47b457bb2cc43828/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f6c2f7365727665726c6573732e737667)](https://github.com/leftclickben/serverless-api-stage#serverless-api-stage-plugin)
 
 Plugin for the [serverless framework](https://github.com/serverless/serverless) that allows the use of stages with 
 defined stage variables and logging configuration, when using the AWS provider.
@@ -61,4 +63,3 @@ Code changes or additions should include corresponding unit test changes or addi
 Please don't update the `version` attribute in `package.json`, as multiple changes might be bundled into a single 
 release.  Version bumps will be done in separate pull requests at the time of creating the release and publishing
 to npm.
-
