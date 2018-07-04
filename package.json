@@ -4,7 +4,7 @@
   "description": "Serverless API Stage plugin, enables stage variables and logging for AWS API Gateway.",
   "main": "src/index.js",
   "scripts": {
-    "lint": "jshint src/*.js test/**/*.js",
+    "lint": "jshint src test",
     "test": "npm run lint && mocha test/spec/**.spec.js"
   },
   "repository": {
