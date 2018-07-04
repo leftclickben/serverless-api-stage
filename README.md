@@ -63,4 +63,3 @@ Code changes or additions should include corresponding unit test changes or addi
 Please don't update the `version` attribute in `package.json`, as multiple changes might be bundled into a single 
 release.  Version bumps will be done in separate pull requests at the time of creating the release and publishing
 to npm.
-
