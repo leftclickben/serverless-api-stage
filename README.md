@@ -58,7 +58,7 @@ Please contribute by submitting a [pull request](https://github.com/leftclickben
 raising an [issue](https://github.com/leftclickben/serverless-api-stage/issues).
 
 Code changes or additions should include corresponding unit test changes or additions.  Tests can be run locally using 
-`npm test`.  This requires global installation of `jshint` and `mocha` (`npm install -g jshint mocha`).
+`npm test`.
 
 Please don't update the `version` attribute in `package.json`, as multiple changes might be bundled into a single 
 release.  Version bumps will be done in separate pull requests at the time of creating the release and publishing
