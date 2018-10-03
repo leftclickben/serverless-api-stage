@@ -113,6 +113,7 @@ module.exports = function (serverless) {
                                 Ref: deploymentKey
                             },
                             Variables: stageSettings.Variables || {},
+                            AccessLogSetting: stageSettings.AccessLogSetting || {},
                             CacheClusterEnabled: stageSettings.CacheClusterEnabled || false,
                             CacheClusterSize: stageSettings.CacheClusterSize || '0.5',
                             ClientCertificateId: stageSettings.ClientCertificateId || undefined,

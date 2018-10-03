@@ -39,6 +39,7 @@ describe('The `serverless-api-stage` plugin', function () {
                         RestApiId: {
                             Ref: 'ApiGatewayRestApi'
                         },
+                        AccessLogSetting: {},
                         CacheClusterEnabled: false,
                         CacheClusterSize: '0.5',
                         ClientCertificateId: undefined,
@@ -70,6 +71,10 @@ describe('The `serverless-api-stage` plugin', function () {
         let serverless, pluginInstance;
         beforeEach(function () {
             serverless = mockServerless('service', 'testing', 'Deployment', {
+                AccessLogSetting: {
+                    DestinationArn: 'test-log-group',
+                    Format: 'test-format'
+                },
                 CacheClusterEnabled: true,
                 CacheClusterSize: '1.0',
                 ClientCertificateId: undefined,
@@ -182,6 +187,10 @@ describe('The `serverless-api-stage` plugin', function () {
                         Description: 'testing stage of service',
                         RestApiId: {
                             Ref: 'ApiGatewayRestApi'
+                        },
+                        AccessLogSetting: {
+                            DestinationArn: 'test-log-group',
+                            Format: 'test-format'
                         },
                         CacheClusterEnabled: true,
                         CacheClusterSize: '1.0',
@@ -319,6 +328,7 @@ describe('The `serverless-api-stage` plugin', function () {
                         RestApiId: {
                             Ref: 'ApiGatewayRestApi'
                         },
+                        AccessLogSetting: {},
                         CacheClusterEnabled: false,
                         CacheClusterSize: '0.5',
                         DeploymentId: {
@@ -450,6 +460,7 @@ describe('The `serverless-api-stage` plugin', function () {
                         RestApiId: {
                             Ref: 'ApiGatewayRestApi'
                         },
+                        AccessLogSetting: {},
                         CacheClusterEnabled: false,
                         CacheClusterSize: '0.5',
                         DeploymentId: {
