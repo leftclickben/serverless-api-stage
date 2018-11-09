@@ -3,34 +3,33 @@
 const ApiStagePlugin = require('../../src/index');
 
 const expect = require('chai').expect;
-const sinon = require('sinon');
 const mockServerless = require('../mock/serverless');
 
-describe('The `serverless-api-stage` plugin', function () {
-    it('Exports a constructor function', function () {
+describe('The `serverless-api-stage` plugin', () => {
+    it('Exports a constructor function', () => {
         expect(ApiStagePlugin).to.be.a('function');
     });
-    describe('The constructed object', function () {
+    describe('The constructed object', () => {
         let pluginInstance;
-        beforeEach(function () {
+        beforeEach(() => {
             pluginInstance = new ApiStagePlugin();
         });
-        it('Exposes a `before:deploy:deploy` hook', function () {
+        it('Exposes a `before:deploy:deploy` hook', () => {
             expect(pluginInstance.hooks).to.be.an('object');
             expect(pluginInstance.hooks['before:deploy:deploy']).to.be.a('function');
         });
     });
-    describe('With no `stageSettings` custom property', function () {
+    describe('With no `stageSettings` custom property', () => {
         let serverless, pluginInstance;
-        beforeEach(function () {
+        beforeEach(() => {
             serverless = mockServerless('service', 'testing', 'Deployment');
             pluginInstance = new ApiStagePlugin(serverless);
         });
-        describe('When the `before:deploy:deploy` hook is executed', function () {
-            beforeEach(function () {
+        describe('When the `before:deploy:deploy` hook is executed', () => {
+            beforeEach(() => {
                 pluginInstance.hooks['before:deploy:deploy']();
             });
-            it('Adds a stage resource to the CloudFormation template with no variables and default settings', function () {
+            it('Adds a stage resource to the CloudFormation template with no variables and default settings', () => {
                 expect(serverless.service.provider.compiledCloudFormationTemplate.Resources.ApiGatewayStageTesting).to.deep.equal({
                     Type: 'AWS::ApiGateway::Stage',
                     Properties: {
@@ -59,17 +58,17 @@ describe('The `serverless-api-stage` plugin', function () {
                     }
                 });
             });
-            it('Removes the `StageName` property of the deployment resource', function () {
+            it('Removes the `StageName` property of the deployment resource', () => {
                 expect(serverless.service.provider.compiledCloudFormationTemplate.Resources.Deployment.Properties.StageName).to.equal(undefined);
             });
-            it('Logs messages', function () {
+            it('Logs messages', () => {
                 expect(serverless.cli.log.calledTwice).to.equal(true);
             });
         });
     });
-    describe('With a `stageSettings` custom property that specifies `Variables` and `StageSettings`', function () {
+    describe('With a `stageSettings` custom property that specifies `Variables` and `StageSettings`', () => {
         let serverless, pluginInstance;
-        beforeEach(function () {
+        beforeEach(() => {
             serverless = mockServerless('service', 'testing', 'Deployment', {
                 AccessLogSetting: {
                     DestinationArn: 'test-log-group',
@@ -92,11 +91,11 @@ describe('The `serverless-api-stage` plugin', function () {
             });
             pluginInstance = new ApiStagePlugin(serverless);
         });
-        describe('When the `before:deploy:deploy` hook is executed', function () {
-            beforeEach(function () {
+        describe('When the `before:deploy:deploy` hook is executed', () => {
+            beforeEach(() => {
                 pluginInstance.hooks['before:deploy:deploy']();
             });
-            it('Adds an IAM Role resource to the CloudFormation template', function () {
+            it('Adds an IAM Role resource to the CloudFormation template', () => {
                 expect(serverless.service.provider.compiledCloudFormationTemplate.Resources.IamRoleApiGatewayCloudwatchLogRole).to.deep.equal({
                     Type: 'AWS::IAM::Role',
                     Properties: {
@@ -163,7 +162,7 @@ describe('The `serverless-api-stage` plugin', function () {
                     }
                 });
             });
-            it('Adds an API Gateway Account resource to the CloudFormation template', function () {
+            it('Adds an API Gateway Account resource to the CloudFormation template', () => {
                 expect(serverless.service.provider.compiledCloudFormationTemplate.Resources.ApiGatewayAccount).to.deep.equal({
                     Type: 'AWS::ApiGateway::Account',
                     Properties: {
@@ -179,7 +178,7 @@ describe('The `serverless-api-stage` plugin', function () {
                     ]
                 });
             });
-            it('Adds an API Gateway Stage resource to the CloudFormation template with specified variables and settings', function () {
+            it('Adds an API Gateway Stage resource to the CloudFormation template with specified variables and settings', () => {
                 expect(serverless.service.provider.compiledCloudFormationTemplate.Resources.ApiGatewayStageTesting).to.deep.equal({
                     Type: 'AWS::ApiGateway::Stage',
                     Properties: {
@@ -216,27 +215,27 @@ describe('The `serverless-api-stage` plugin', function () {
                     }
                 });
             });
-            it('Removes the `StageName` property of the API Gateway Deployment resource', function () {
+            it('Removes the `StageName` property of the API Gateway Deployment resource', () => {
                 expect(serverless.service.provider.compiledCloudFormationTemplate.Resources.Deployment.Properties.StageName).to.equal(undefined);
             });
-            it('Logs messages', function () {
+            it('Logs messages', () => {
                 expect(serverless.cli.log.calledTwice).to.equal(true);
             });
         });
     });
-    describe('With a `stageSettings` custom property that specifies `ClientCertificateId`', function () {
+    describe('With a `stageSettings` custom property that specifies `ClientCertificateId`', () => {
         let serverless, pluginInstance;
-        beforeEach(function () {
+        beforeEach(() => {
             serverless = mockServerless('service', 'testing', 'Deployment', {
                 ClientCertificateId: 'id-of-certificate'
             });
             pluginInstance = new ApiStagePlugin(serverless);
         });
-        describe('When the `before:deploy:deploy` hook is executed', function () {
-            beforeEach(function () {
+        describe('When the `before:deploy:deploy` hook is executed', () => {
+            beforeEach(() => {
                 pluginInstance.hooks['before:deploy:deploy']();
             });
-            it('Adds an IAM Role resource to the CloudFormation template', function () {
+            it('Adds an IAM Role resource to the CloudFormation template', () => {
                 expect(serverless.service.provider.compiledCloudFormationTemplate.Resources.IamRoleApiGatewayCloudwatchLogRole).to.deep.equal({
                     Type: 'AWS::IAM::Role',
                     Properties: {
@@ -303,7 +302,7 @@ describe('The `serverless-api-stage` plugin', function () {
                     }
                 });
             });
-            it('Adds an API Gateway Account resource to the CloudFormation template', function () {
+            it('Adds an API Gateway Account resource to the CloudFormation template', () => {
                 expect(serverless.service.provider.compiledCloudFormationTemplate.Resources.ApiGatewayAccount).to.deep.equal({
                     Type: 'AWS::ApiGateway::Account',
                     Properties: {
@@ -319,7 +318,7 @@ describe('The `serverless-api-stage` plugin', function () {
                     ]
                 });
             });
-            it('Adds an API Gateway Stage resource to the CloudFormation template with specified variables and settings', function () {
+            it('Adds an API Gateway Stage resource to the CloudFormation template with specified variables and settings', () => {
                 expect(serverless.service.provider.compiledCloudFormationTemplate.Resources.ApiGatewayStageTesting).to.deep.equal({
                     Type: 'AWS::ApiGateway::Stage',
                     Properties: {
@@ -348,27 +347,27 @@ describe('The `serverless-api-stage` plugin', function () {
                     }
                 });
             });
-            it('Removes the `StageName` property of the API Gateway Deployment resource', function () {
+            it('Removes the `StageName` property of the API Gateway Deployment resource', () => {
                 expect(serverless.service.provider.compiledCloudFormationTemplate.Resources.Deployment.Properties.StageName).to.equal(undefined);
             });
-            it('Logs messages', function () {
+            it('Logs messages', () => {
                 expect(serverless.cli.log.calledTwice).to.equal(true);
             });
         });
     });
-    describe('With a `stageSettings` custom property that specifies `DocumentationVersion`', function () {
+    describe('With a `stageSettings` custom property that specifies `DocumentationVersion`', () => {
         let serverless, pluginInstance;
-        beforeEach(function () {
+        beforeEach(() => {
             serverless = mockServerless('service', 'testing', 'Deployment', {
                 DocumentationVersion: 'v1.0.0'
             });
             pluginInstance = new ApiStagePlugin(serverless);
         });
-        describe('When the `before:deploy:deploy` hook is executed', function () {
-            beforeEach(function () {
+        describe('When the `before:deploy:deploy` hook is executed', () => {
+            beforeEach(() => {
                 pluginInstance.hooks['before:deploy:deploy']();
             });
-            it('Adds an IAM Role resource to the CloudFormation template', function () {
+            it('Adds an IAM Role resource to the CloudFormation template', () => {
                 expect(serverless.service.provider.compiledCloudFormationTemplate.Resources.IamRoleApiGatewayCloudwatchLogRole).to.deep.equal({
                     Type: 'AWS::IAM::Role',
                     Properties: {
@@ -435,7 +434,7 @@ describe('The `serverless-api-stage` plugin', function () {
                     }
                 });
             });
-            it('Adds an API Gateway Account resource to the CloudFormation template', function () {
+            it('Adds an API Gateway Account resource to the CloudFormation template', () => {
                 expect(serverless.service.provider.compiledCloudFormationTemplate.Resources.ApiGatewayAccount).to.deep.equal({
                     Type: 'AWS::ApiGateway::Account',
                     Properties: {
@@ -451,7 +450,7 @@ describe('The `serverless-api-stage` plugin', function () {
                     ]
                 });
             });
-            it('Adds an API Gateway Stage resource to the CloudFormation template with specified variables and settings', function () {
+            it('Adds an API Gateway Stage resource to the CloudFormation template with specified variables and settings', () => {
                 expect(serverless.service.provider.compiledCloudFormationTemplate.Resources.ApiGatewayStageTesting).to.deep.equal({
                     Type: 'AWS::ApiGateway::Stage',
                     Properties: {
@@ -480,10 +479,10 @@ describe('The `serverless-api-stage` plugin', function () {
                     }
                 });
             });
-            it('Removes the `StageName` property of the API Gateway Deployment resource', function () {
+            it('Removes the `StageName` property of the API Gateway Deployment resource', () => {
                 expect(serverless.service.provider.compiledCloudFormationTemplate.Resources.Deployment.Properties.StageName).to.equal(undefined);
             });
-            it('Logs messages', function () {
+            it('Logs messages', () => {
                 expect(serverless.cli.log.calledTwice).to.equal(true);
             });
         });
