@@ -2,9 +2,9 @@
 
 const sinon = require('sinon');
 
-module.exports = (service, stageName, deploymentKey, stageSettings) => ({
+module.exports = (service, stageName, deploymentKey, stageSettings, enableLogging, logRoleLogicalName) => ({
     service: {
-        service: service,
+        service,
         provider: {
             compiledCloudFormationTemplate: {
                 Resources: {
@@ -19,7 +19,9 @@ module.exports = (service, stageName, deploymentKey, stageSettings) => ({
             }
         },
         custom: {
-            stageSettings: stageSettings
+            stageSettings,
+            enableLogging,
+            logRoleLogicalName
         }
     },
     getProvider: () => ({
