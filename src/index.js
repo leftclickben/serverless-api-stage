@@ -13,8 +13,8 @@ module.exports = function (serverless) {
             const deployments = _(template.Resources)
                 .pickBy((resource) => resource.Type === 'AWS::ApiGateway::Deployment');
             const usagePlansAndKeys = _(template.Resources)
-                .pickBy((resource) => resource.Type === 'AWS::ApiGateway::UsagePlan'
-                    || resource.Type === 'AWS::ApiGateway::ApiKey');
+                .pickBy((resource) => resource.Type === 'AWS::ApiGateway::UsagePlan' ||
+                    resource.Type === 'AWS::ApiGateway::ApiKey');
 
             // TODO Handle other resources - ApiKey, BasePathMapping, UsagePlan, etc
             const methodSettings = [].concat(stageSettings.MethodSettings);
