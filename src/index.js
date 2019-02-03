@@ -12,6 +12,9 @@ module.exports = function (serverless) {
             const template = serverless.service.provider.compiledCloudFormationTemplate;
             const deployments = _(template.Resources)
                 .pickBy((resource) => resource.Type === 'AWS::ApiGateway::Deployment');
+            const usagePlansAndKeys = _(template.Resources)
+                .pickBy((resource) => resource.Type === 'AWS::ApiGateway::UsagePlan'
+                    || resource.Type === 'AWS::ApiGateway::ApiKey');
 
             // TODO Handle other resources - ApiKey, BasePathMapping, UsagePlan, etc
             const methodSettings = [].concat(stageSettings.MethodSettings);
@@ -137,6 +140,20 @@ module.exports = function (serverless) {
                 // Deployments, with the stage name removed (the Stage's DeploymentId property is used instead).
                 deployments
                     .mapValues((deployment) => _.omit(deployment, 'Properties.StageName'))
+                    .value(),
+
+                usagePlansAndKeys
+                    .mapValues((plan) => {
+                        let dependsOn = _.concat([], _.get(plan, 'DependsOn', [])).map((dep) => {
+                            const deployment = deployments.get(dep);
+                            if (deployment) {
+                                dep = `ApiGatewayStage${_.upperFirst(deployment.Properties.StageName)}`;
+                            }
+                            return dep;
+                        });
+                        _.set(plan, 'DependsOn', dependsOn);
+                        return plan;
+                    })
                     .value()
             );
 
