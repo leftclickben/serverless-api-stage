@@ -15,9 +15,9 @@ describe('The `serverless-api-stage` plugin', function () {
         beforeEach(function () {
             pluginInstance = new ApiStagePlugin();
         });
-        it('Exposes a `before:deploy:deploy` hook', function () {
+        it('Exposes a `before:package:compileEvents` hook', function () {
             expect(pluginInstance.hooks).to.be.an('object');
-            expect(pluginInstance.hooks['before:deploy:deploy']).to.be.a('function');
+            expect(pluginInstance.hooks['before:package:compileEvents']).to.be.a('function');
         });
     });
     describe('With no `stageSettings` custom property', function () {
@@ -26,9 +26,9 @@ describe('The `serverless-api-stage` plugin', function () {
             serverless = mockServerless('service', 'testing', 'Deployment');
             pluginInstance = new ApiStagePlugin(serverless);
         });
-        describe('When the `before:deploy:deploy` hook is executed', function () {
+        describe('When the `before:package:compileEvents` hook is executed', function () {
             beforeEach(function () {
-                pluginInstance.hooks['before:deploy:deploy']();
+                pluginInstance.hooks['before:package:compileEvents']();
             });
             it('Adds a stage resource to the CloudFormation template with no variables and default settings', function () {
                 expect(serverless.service.provider.compiledCloudFormationTemplate.Resources.ApiGatewayStageTesting).to.deep.equal({
@@ -92,9 +92,9 @@ describe('The `serverless-api-stage` plugin', function () {
             });
             pluginInstance = new ApiStagePlugin(serverless);
         });
-        describe('When the `before:deploy:deploy` hook is executed', function () {
+        describe('When the `before:package:compileEvents` hook is executed', function () {
             beforeEach(function () {
-                pluginInstance.hooks['before:deploy:deploy']();
+                pluginInstance.hooks['before:package:compileEvents']();
             });
             it('Adds an IAM Role resource to the CloudFormation template', function () {
                 expect(serverless.service.provider.compiledCloudFormationTemplate.Resources.IamRoleApiGatewayCloudwatchLogRole).to.deep.equal({
@@ -232,9 +232,9 @@ describe('The `serverless-api-stage` plugin', function () {
             });
             pluginInstance = new ApiStagePlugin(serverless);
         });
-        describe('When the `before:deploy:deploy` hook is executed', function () {
+        describe('When the `before:package:compileEvents` hook is executed', function () {
             beforeEach(function () {
-                pluginInstance.hooks['before:deploy:deploy']();
+                pluginInstance.hooks['before:package:compileEvents']();
             });
             it('Adds an IAM Role resource to the CloudFormation template', function () {
                 expect(serverless.service.provider.compiledCloudFormationTemplate.Resources.IamRoleApiGatewayCloudwatchLogRole).to.deep.equal({
@@ -364,9 +364,9 @@ describe('The `serverless-api-stage` plugin', function () {
             });
             pluginInstance = new ApiStagePlugin(serverless);
         });
-        describe('When the `before:deploy:deploy` hook is executed', function () {
+        describe('When the `before:package:compileEvents` hook is executed', function () {
             beforeEach(function () {
-                pluginInstance.hooks['before:deploy:deploy']();
+                pluginInstance.hooks['before:package:compileEvents']();
             });
             it('Adds an IAM Role resource to the CloudFormation template', function () {
                 expect(serverless.service.provider.compiledCloudFormationTemplate.Resources.IamRoleApiGatewayCloudwatchLogRole).to.deep.equal({
