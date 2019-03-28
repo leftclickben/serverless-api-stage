@@ -4,7 +4,7 @@ const _ = require('lodash');
 
 module.exports = function (serverless) {
     this.hooks = {
-        'before:deploy:deploy': function () {
+        'before:package:finalize': function () {
             serverless.cli.log('Commencing API Gateway stage configuration');
 
             const logRoleLogicalName = 'IamRoleApiGatewayCloudwatchLogRole';
