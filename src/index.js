@@ -2,6 +2,10 @@
 
 const _ = require("lodash");
 
+const stageName = function(stage) {
+    return `ApiGatewayStage${_.upperFirst(_.cammelCase(stage))}`;
+};
+
 module.exports = function(serverless) {
     this.hooks = {
         "before:deploy:deploy": function() {
@@ -15,11 +19,8 @@ module.exports = function(serverless) {
                 resource => resource.Type === "AWS::ApiGateway::Deployment"
             );
             const stages = deployments
-                .mapValues(
-                    deployment =>
-                        `ApiGatewayStage${_.upperFirst(
-                            deployment.Properties.StageName
-                        )}`
+                .mapValues(deployment =>
+                    stageName(deployment.Properties.StageName)
                 )
                 .values();
 
@@ -71,11 +72,8 @@ module.exports = function(serverless) {
                             )
                         }
                     }))
-                    .mapKeys(
-                        deployment =>
-                            `ApiGatewayStage${_.upperFirst(
-                                deployment.Properties.StageName
-                            )}`
+                    .mapKeys(deployment =>
+                        stageName(deployment.Properties.StageName)
                     )
                     .value(),
 
