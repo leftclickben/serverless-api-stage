@@ -85,6 +85,94 @@ module.exports = function(serverless) {
                     .value()
             );
 
+            // Sets/Replaces Log Account Role only if explicitly requested by user
+            if (stageSettings.CreateLogAccount) {
+                _.extend(
+                    template.Resources,
+                    // Enable logging: IAM role for API Gateway, and API Gateway account settings
+                    {
+                        [logRoleLogicalName]: {
+                            Type: "AWS::IAM::Role",
+                            Properties: {
+                                AssumeRolePolicyDocument: {
+                                    Version: "2012-10-17",
+                                    Statement: [
+                                        {
+                                            Effect: "Allow",
+                                            Principal: {
+                                                Service: [
+                                                    "apigateway.amazonaws.com"
+                                                ]
+                                            },
+                                            Action: ["sts:AssumeRole"]
+                                        }
+                                    ]
+                                },
+                                Policies: [
+                                    {
+                                        PolicyName: {
+                                            "Fn::Join": [
+                                                "-",
+                                                [
+                                                    serverless
+                                                        .getProvider("aws")
+                                                        .getStage(),
+                                                    serverless.service.service,
+                                                    "apiGatewayLogs"
+                                                ]
+                                            ]
+                                        },
+                                        PolicyDocument: {
+                                            Version: "2012-10-17",
+                                            Statement: [
+                                                {
+                                                    Effect: "Allow",
+                                                    Action: [
+                                                        "logs:CreateLogGroup",
+                                                        "logs:CreateLogStream",
+                                                        "logs:DescribeLogGroups",
+                                                        "logs:DescribeLogStreams",
+                                                        "logs:PutLogEvents",
+                                                        "logs:GetLogEvents",
+                                                        "logs:FilterLogEvents"
+                                                    ],
+                                                    Resource: "*"
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ],
+                                Path: "/",
+                                RoleName: {
+                                    "Fn::Join": [
+                                        "-",
+                                        [
+                                            serverless.service.service,
+                                            serverless
+                                                .getProvider("aws")
+                                                .getStage(),
+                                            serverless
+                                                .getProvider("aws")
+                                                .getRegion(),
+                                            "apiGatewayLogRole"
+                                        ]
+                                    ]
+                                }
+                            }
+                        },
+                        ApiGatewayAccount: {
+                            Type: "AWS::ApiGateway::Account",
+                            Properties: {
+                                CloudWatchRoleArn: {
+                                    "Fn::GetAtt": [logRoleLogicalName, "Arn"]
+                                }
+                            },
+                            DependsOn: [logRoleLogicalName]
+                        }
+                    }
+                );
+            }
+
             serverless.cli.log("API Gateway stage configuration complete");
         }
     };
