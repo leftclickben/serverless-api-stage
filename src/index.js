@@ -3,7 +3,7 @@
 const _ = require("lodash");
 
 const stageName = function(stage) {
-    return `ApiGatewayStage${_.upperFirst(_.cammelCase(stage))}`;
+    return `ApiGatewayStage${_.upperFirst(_.camelCase(stage))}`;
 };
 
 module.exports = function(serverless) {
