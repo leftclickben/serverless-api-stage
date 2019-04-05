@@ -27,7 +27,9 @@ module.exports = function(serverless) {
             // Handles BasePathMapping
             _.mapValues(template.Resources, function(resource, name) {
                 if (resource.Type === "AWS::ApiGateway::BasePathMapping") {
-                    resource.DependsOn.push(...stages);
+                    stages.forEach(function(stage) {
+                        resource.DependsOn.push(stage);
+                    });
                 }
                 return resource;
             });
