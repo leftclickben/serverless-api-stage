@@ -71,7 +71,9 @@ module.exports = function(serverless) {
                                     ResourcePath: "/*",
                                     MetricsEnabled: false
                                 })
-                            )
+                            ),
+                            TracingEnabled:
+                                stageSettings.TracingEnabled || false
                         }
                     }))
                     .mapKeys(deployment =>
