@@ -52,6 +52,7 @@ describe("The `serverless-api-stage` plugin", function() {
                         DeploymentId: {
                             Ref: "Deployment"
                         },
+                        TracingEnabled: false,
                         Variables: {},
                         MethodSettings: [
                             {
@@ -256,6 +257,7 @@ describe("The `serverless-api-stage` plugin", function() {
                         DeploymentId: {
                             Ref: "Deployment"
                         },
+                        TracingEnabled: false,
                         Variables: {
                             foo: "bar"
                         },
@@ -396,6 +398,7 @@ describe("The `serverless-api-stage` plugin", function() {
                         },
                         ClientCertificateId: "id-of-certificate",
                         DocumentationVersion: undefined,
+                        TracingEnabled: false,
                         Variables: {},
                         MethodSettings: [
                             {
@@ -531,6 +534,7 @@ describe("The `serverless-api-stage` plugin", function() {
                         },
                         ClientCertificateId: undefined,
                         DocumentationVersion: "v1.0.0",
+                        TracingEnabled: false,
                         Variables: {},
                         MethodSettings: [
                             {
@@ -551,6 +555,53 @@ describe("The `serverless-api-stage` plugin", function() {
             });
             it("Logs messages", function() {
                 expect(serverless.cli.log.calledTwice).to.equal(true);
+            });
+        });
+    });
+    describe("With a `stageSettings` that has `TracingEnabled` value", function() {
+        let serverless, pluginInstance;
+        beforeEach(function() {
+            serverless = mockServerless("service", "testing", "Deployment", {
+                TracingEnabled: true
+            });
+            pluginInstance = new ApiStagePlugin(serverless);
+        });
+        describe("When the `before:deploy:deploy` hook is executed", function() {
+            beforeEach(function() {
+                pluginInstance.hooks["before:deploy:deploy"]();
+            });
+            it("Should set TracingEnabled on StageSettings", function() {
+                expect(
+                    serverless.service.provider.compiledCloudFormationTemplate
+                        .Resources.ApiGatewayStageTesting
+                ).to.deep.equal({
+                    Type: "AWS::ApiGateway::Stage",
+                    Properties: {
+                        StageName: "testing",
+                        Description: "testing stage of service",
+                        RestApiId: {
+                            Ref: "ApiGatewayRestApi"
+                        },
+                        AccessLogSetting: {},
+                        CacheClusterEnabled: false,
+                        CacheClusterSize: "0.5",
+                        DeploymentId: {
+                            Ref: "Deployment"
+                        },
+                        ClientCertificateId: undefined,
+                        DocumentationVersion: undefined,
+                        TracingEnabled: true,
+                        Variables: {},
+                        MethodSettings: [
+                            {
+                                DataTraceEnabled: true,
+                                HttpMethod: "*",
+                                ResourcePath: "/*",
+                                MetricsEnabled: false
+                            }
+                        ]
+                    }
+                });
             });
         });
     });
