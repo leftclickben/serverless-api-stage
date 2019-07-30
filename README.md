@@ -50,7 +50,7 @@ custom:
 ```
 
 The full list of `MethodSettings` available are defined in the 
-[AWS CloudFormation documentation](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigateway-stage-methodsetting.html).
+[AWS CloudFormation documentation](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apitgateway-stage-methodsetting.html).
 
 ## Contributors
 
