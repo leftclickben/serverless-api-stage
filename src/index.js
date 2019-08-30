@@ -116,16 +116,23 @@ module.exports = function (serverless) {
                             AccessLogSetting: stageSettings.AccessLogSetting || {},
                             CacheClusterEnabled: stageSettings.CacheClusterEnabled || false,
                             CacheClusterSize: stageSettings.CacheClusterSize || '0.5',
+                            TracingEnabled: stageSettings.TracingEnabled || false,
                             ClientCertificateId: stageSettings.ClientCertificateId || undefined,
                             DocumentationVersion: stageSettings.DocumentationVersion || undefined,
                             MethodSettings: methodSettings.map((item) => (
                                 _.defaults(
                                     item || {},
                                     {
-                                        DataTraceEnabled: true,
-                                        HttpMethod: '*',
-                                        ResourcePath: '/*',
-                                        MetricsEnabled: false
+                                        HttpMethod: stageSettings.MethodSettingsGlobal.HttpMethod || '*',
+                                        ResourcePath: stageSettings.MethodSettingsGlobal.ResourcePath || '/*',
+                                        CachingEnabled: stageSettings.MethodSettingsGlobal.CachingEnabled || false,
+                                        CacheDataEncrypted: stageSettings.MethodSettingsGlobal.CacheDataEncrypted || false,
+                                        CacheTtlInSeconds: stageSettings.MethodSettingsGlobal.CacheTtlInSeconds || undefined,
+                                        DataTraceEnabled: stageSettings.MethodSettingsGlobal.DataTraceEnabled || false,
+                                        LoggingLevel: stageSettings.MethodSettingsGlobal.LoggingLevel || 'OFF',
+                                        MetricsEnabled: stageSettings.MethodSettingsGlobal.MetricsEnabled || false,
+                                        ThrottlingBurstLimit: stageSettings.MethodSettingsGlobal.ThrottlingBurstLimit || undefined,
+                                        ThrottlingRateLimit: stageSettings.MethodSettingsGlobal.ThrottlingRateLimit || undefined
                                     }
                                 )
                             ))

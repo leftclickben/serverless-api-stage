@@ -38,14 +38,34 @@ custom:
   stageSettings:
     CacheClusterEnabled: true
     CacheClusterSize: '0.5'
+    TracingEnabled: Boolean
     Variables:
       foo: bar
       baz: xyzzy
+    # The MethodSettingsGlobal property type configures settings for all methods in a stage.
+    # Required
+    MethodSettingsGlobal:
+      CacheDataEncrypted: Boolean
+      CacheTtlInSeconds: Integer
+      CachingEnabled: Boolean
+      DataTraceEnabled: Boolean
+      HttpMethod: String
+      LoggingLevel: String
+      MetricsEnabled: Boolean
+      ResourcePath: String
+      ThrottlingBurstLimit: Integer
+      ThrottlingRateLimit: Double
+    # MethodSettings:Optional, Use this to overwrite above global settings at each method level.
+    # Type: List of MethodSetting
     MethodSettings:
-      LoggingLevel: INFO
-      CachingEnabled: true
-      CacheTtlInSeconds: 3600
-      # see below...
+    - CacheDataEncrypted: Boolean
+      CacheTtlInSeconds: Integer
+      CachingEnabled: Boolean
+      ...
+    - CacheDataEncrypted: Boolean
+      CacheTtlInSeconds: Integer
+      CachingEnabled: Boolean
+      ...
 #...
 ```
 
