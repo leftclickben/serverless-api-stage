@@ -123,16 +123,16 @@ module.exports = function (serverless) {
                                 _.defaults(
                                     item || {},
                                     {
-                                        HttpMethod: stageSettings.MethodSettingsGlobal.HttpMethod || '*',
-                                        ResourcePath: stageSettings.MethodSettingsGlobal.ResourcePath || '/*',
-                                        CachingEnabled: stageSettings.MethodSettingsGlobal.CachingEnabled || false,
-                                        CacheDataEncrypted: stageSettings.MethodSettingsGlobal.CacheDataEncrypted || false,
-                                        CacheTtlInSeconds: stageSettings.MethodSettingsGlobal.CacheTtlInSeconds || undefined,
-                                        DataTraceEnabled: stageSettings.MethodSettingsGlobal.DataTraceEnabled || false,
-                                        LoggingLevel: stageSettings.MethodSettingsGlobal.LoggingLevel || 'OFF',
-                                        MetricsEnabled: stageSettings.MethodSettingsGlobal.MetricsEnabled || false,
-                                        ThrottlingBurstLimit: stageSettings.MethodSettingsGlobal.ThrottlingBurstLimit || undefined,
-                                        ThrottlingRateLimit: stageSettings.MethodSettingsGlobal.ThrottlingRateLimit || undefined
+                                        HttpMethod: stageSettings.HttpMethod || '*',
+                                        ResourcePath: stageSettings.ResourcePath || '/*',
+                                        CachingEnabled: stageSettings.CachingEnabled || false,
+                                        CacheDataEncrypted: stageSettings.CacheDataEncrypted || false,
+                                        CacheTtlInSeconds: stageSettings.CacheTtlInSeconds || undefined,
+                                        DataTraceEnabled: stageSettings.DataTraceEnabled || false,
+                                        LoggingLevel: stageSettings.LoggingLevel || 'OFF',
+                                        MetricsEnabled: stageSettings.MetricsEnabled || false,
+                                        ThrottlingBurstLimit: stageSettings.ThrottlingBurstLimit || undefined,
+                                        ThrottlingRateLimit: stageSettings.ThrottlingRateLimit || undefined
                                     }
                                 )
                             ))

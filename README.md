@@ -42,10 +42,10 @@ custom:
     Variables:
       foo: bar
       baz: xyzzy
-    # The MethodSettingsGlobal property type configures settings for all methods in a stage.
-    # Required
-    MethodSettingsGlobal:
-      CacheDataEncrypted: Boolean
+    # MethodSettings:Use this to overwrite above global settings at each method level.
+    # Type: List of MethodSetting
+    MethodSettings:
+    - CacheDataEncrypted: Boolean
       CacheTtlInSeconds: Integer
       CachingEnabled: Boolean
       DataTraceEnabled: Boolean
@@ -55,12 +55,6 @@ custom:
       ResourcePath: String
       ThrottlingBurstLimit: Integer
       ThrottlingRateLimit: Double
-    # MethodSettings:Optional, Use this to overwrite above global settings at each method level.
-    # Type: List of MethodSetting
-    MethodSettings:
-    - CacheDataEncrypted: Boolean
-      CacheTtlInSeconds: Integer
-      CachingEnabled: Boolean
       ...
     - CacheDataEncrypted: Boolean
       CacheTtlInSeconds: Integer
