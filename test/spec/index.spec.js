@@ -42,6 +42,7 @@ describe('The `serverless-api-stage` plugin', function () {
                         AccessLogSetting: {},
                         CacheClusterEnabled: false,
                         CacheClusterSize: '0.5',
+                        TracingEnabled: false,
                         ClientCertificateId: undefined,
                         DocumentationVersion: undefined,
                         DeploymentId: {
@@ -50,10 +51,16 @@ describe('The `serverless-api-stage` plugin', function () {
                         Variables: {},
                         MethodSettings: [
                             {
-                                DataTraceEnabled: true,
                                 HttpMethod: '*',
                                 ResourcePath: '/*',
-                                MetricsEnabled: false
+                                CachingEnabled: false,
+                                CacheDataEncrypted: false,
+                                CacheTtlInSeconds: undefined,
+                                DataTraceEnabled: false,
+                                LoggingLevel: 'OFF',
+                                MetricsEnabled: false,
+                                ThrottlingBurstLimit: undefined,
+                                ThrottlingRateLimit: undefined
                             }
                         ]
                     }
@@ -77,6 +84,7 @@ describe('The `serverless-api-stage` plugin', function () {
                 },
                 CacheClusterEnabled: true,
                 CacheClusterSize: '1.0',
+                TracingEnabled: true,
                 ClientCertificateId: undefined,
                 DocumentationVersion: undefined,
                 Variables: {
@@ -87,7 +95,8 @@ describe('The `serverless-api-stage` plugin', function () {
                     MetricsEnabled: true,
                     HttpMethod: 'GET',
                     CacheTtlInSeconds: 3600,
-                    CachingEnabled: true
+                    CachingEnabled: true,
+                    DataTraceEnabled: true
                 }
             });
             pluginInstance = new ApiStagePlugin(serverless);
@@ -194,6 +203,7 @@ describe('The `serverless-api-stage` plugin', function () {
                         },
                         CacheClusterEnabled: true,
                         CacheClusterSize: '1.0',
+                        TracingEnabled: true,
                         ClientCertificateId: undefined,
                         DocumentationVersion: undefined,
                         DeploymentId: {
@@ -207,10 +217,13 @@ describe('The `serverless-api-stage` plugin', function () {
                                 LoggingLevel: 'INFO',
                                 CacheTtlInSeconds: 3600,
                                 CachingEnabled: true,
+                                CacheDataEncrypted: false,
                                 DataTraceEnabled: true,
                                 HttpMethod: 'GET',
                                 ResourcePath: '/*',
-                                MetricsEnabled: true
+                                MetricsEnabled: true,
+                                ThrottlingBurstLimit: undefined,
+                                ThrottlingRateLimit: undefined
                             }
                         ]
                     }
@@ -331,6 +344,7 @@ describe('The `serverless-api-stage` plugin', function () {
                         AccessLogSetting: {},
                         CacheClusterEnabled: false,
                         CacheClusterSize: '0.5',
+                        TracingEnabled: false,
                         DeploymentId: {
                             Ref: 'Deployment'
                         },
@@ -339,10 +353,16 @@ describe('The `serverless-api-stage` plugin', function () {
                         Variables: {},
                         MethodSettings: [
                             {
-                                DataTraceEnabled: true,
                                 HttpMethod: '*',
                                 ResourcePath: '/*',
-                                MetricsEnabled: false
+                                CachingEnabled: false,
+                                CacheDataEncrypted: false,
+                                CacheTtlInSeconds: undefined,
+                                DataTraceEnabled: false,
+                                LoggingLevel: 'OFF',
+                                MetricsEnabled: false,
+                                ThrottlingBurstLimit: undefined,
+                                ThrottlingRateLimit: undefined
                             }
                         ]
                     }
@@ -463,6 +483,7 @@ describe('The `serverless-api-stage` plugin', function () {
                         AccessLogSetting: {},
                         CacheClusterEnabled: false,
                         CacheClusterSize: '0.5',
+                        TracingEnabled: false,
                         DeploymentId: {
                             Ref: 'Deployment'
                         },
@@ -471,10 +492,16 @@ describe('The `serverless-api-stage` plugin', function () {
                         Variables: {},
                         MethodSettings: [
                             {
-                                DataTraceEnabled: true,
                                 HttpMethod: '*',
                                 ResourcePath: '/*',
-                                MetricsEnabled: false
+                                CachingEnabled: false,
+                                CacheDataEncrypted: false,
+                                CacheTtlInSeconds: undefined,
+                                DataTraceEnabled: false,
+                                LoggingLevel: 'OFF',
+                                MetricsEnabled: false,
+                                ThrottlingBurstLimit: undefined,
+                                ThrottlingRateLimit: undefined
                             }
                         ]
                     }

@@ -116,16 +116,23 @@ module.exports = function (serverless) {
                             AccessLogSetting: stageSettings.AccessLogSetting || {},
                             CacheClusterEnabled: stageSettings.CacheClusterEnabled || false,
                             CacheClusterSize: stageSettings.CacheClusterSize || '0.5',
+                            TracingEnabled: stageSettings.TracingEnabled || false,
                             ClientCertificateId: stageSettings.ClientCertificateId || undefined,
                             DocumentationVersion: stageSettings.DocumentationVersion || undefined,
                             MethodSettings: methodSettings.map((item) => (
                                 _.defaults(
                                     item || {},
                                     {
-                                        DataTraceEnabled: true,
-                                        HttpMethod: '*',
-                                        ResourcePath: '/*',
-                                        MetricsEnabled: false
+                                        HttpMethod: stageSettings.HttpMethod || '*',
+                                        ResourcePath: stageSettings.ResourcePath || '/*',
+                                        CachingEnabled: stageSettings.CachingEnabled || false,
+                                        CacheDataEncrypted: stageSettings.CacheDataEncrypted || false,
+                                        CacheTtlInSeconds: stageSettings.CacheTtlInSeconds || undefined,
+                                        DataTraceEnabled: stageSettings.DataTraceEnabled || false,
+                                        LoggingLevel: stageSettings.LoggingLevel || 'OFF',
+                                        MetricsEnabled: stageSettings.MetricsEnabled || false,
+                                        ThrottlingBurstLimit: stageSettings.ThrottlingBurstLimit || undefined,
+                                        ThrottlingRateLimit: stageSettings.ThrottlingRateLimit || undefined
                                     }
                                 )
                             ))
