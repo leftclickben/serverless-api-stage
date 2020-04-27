@@ -488,4 +488,19 @@ describe('The `serverless-api-stage` plugin', function () {
             });
         });
     });
+    describe('Using non default restApiId`', function () {
+        let serverless, pluginInstance;
+        beforeEach(function () {
+            serverless = mockServerless('service', 'testing', 'Deployment', {},  {restApiId: 'foobar'});
+            pluginInstance = new ApiStagePlugin(serverless);
+        });
+        describe('When the `before:deploy:deploy` hook is executed', function () {
+            beforeEach(function () {
+                pluginInstance.hooks['before:deploy:deploy']();
+            });
+            it('Adds an API Gateway Stage resource to the CloudFormation template with specified variables and settings', function () {
+                expect(serverless.service.provider.compiledCloudFormationTemplate.Resources.ApiGatewayStageTesting.Properties.RestApiId).to.equal(serverless.service.provider.apiGateway.restApiId);
+            });
+        });
+    });
 });

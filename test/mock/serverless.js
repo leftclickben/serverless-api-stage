@@ -2,7 +2,7 @@
 
 const sinon = require('sinon');
 
-module.exports = (service, stageName, deploymentKey, stageSettings) => ({
+module.exports = (service, stageName, deploymentKey, stageSettings, apiGateway) => ({
     service: {
         service: service,
         provider: {
@@ -16,7 +16,8 @@ module.exports = (service, stageName, deploymentKey, stageSettings) => ({
                         }
                     }
                 }
-            }
+            },
+            apiGateway
         },
         custom: {
             stageSettings: stageSettings
