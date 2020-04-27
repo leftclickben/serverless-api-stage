@@ -107,7 +107,7 @@ module.exports = function (serverless) {
                             StageName: deployment.Properties.StageName,
                             Description: `${deployment.Properties.StageName} stage of ${serverless.service.service}`,
                             RestApiId: {
-                                Ref: 'ApiGatewayRestApi'
+                                Ref: _.get(serverless, 'service.provider.apiGateway.restApiId', 'ApiGatewayRestApi')
                             },
                             DeploymentId: {
                                 Ref: deploymentKey
