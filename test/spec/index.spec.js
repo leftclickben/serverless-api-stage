@@ -499,7 +499,7 @@ describe('The `serverless-api-stage` plugin', function () {
                 pluginInstance.hooks['before:deploy:deploy']();
             });
             it('Adds an API Gateway Stage resource to the CloudFormation template with specified variables and settings', function () {
-                expect(serverless.service.provider.compiledCloudFormationTemplate.Resources.ApiGatewayStageTesting.Properties.RestApiId.Ref).to.equal(serverless.service.provider.apiGateway.restApiId);
+                expect(serverless.service.provider.compiledCloudFormationTemplate.Resources.ApiGatewayStageTesting.Properties.RestApiId).to.equal(serverless.service.provider.apiGateway.restApiId);
             });
         });
     });
