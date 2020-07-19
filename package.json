@@ -29,12 +29,12 @@
   },
   "homepage": "https://github.com/leftclickben/serverless-api-stage#readme",
   "devDependencies": {
-    "chai": "^4.1.2",
-    "jshint": "^2.9.5",
-    "mocha": "^5.2.0",
-    "sinon": "^6.1.0"
+    "chai": "^4.2.0",
+    "jshint": "^2.11.1",
+    "mocha": "^8.0.1",
+    "sinon": "^9.0.2"
   },
   "dependencies": {
-    "lodash": "^4.17.10"
+    "lodash": "^4.17.19"
   }
 }
